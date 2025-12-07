@@ -391,8 +391,8 @@ def main():
         """Set bot commands after initialization"""
         from telegram import BotCommand
         await app.bot.set_my_commands([
-            BotCommand("start", "🌿 ابدأ من جديد - Start over"),
-            BotCommand("help", "❓ المساعدة - Get help"),
+            BotCommand("start", "🌿 ابدأ من جديد"),
+            BotCommand("help", "❓ المساعدة"),
         ])
         print("✅ Bot commands menu configured")
     
