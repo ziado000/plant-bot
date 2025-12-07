@@ -17,33 +17,55 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 # Download models from Dropbox
 def download_models_from_dropbox():
     models_dir = Path('models')
-    if models_dir.exists() and len(list(models_dir.glob('*.keras'))) >= 18:
-        print("✅ Models exist")
-        return
+    
+    print(f"🔍 Checking models directory...")
+    print(f"   Directory exists: {models_dir.exists()}")
+    
+    if models_dir.exists():
+        model_files = list(models_dir.glob('*.keras'))
+        print(f"   Found {len(model_files)} .keras files")
+        if len(model_files) >= 18:
+            print("✅ All 18 models exist, skipping download")
+            return
+        else:
+            print(f"⚠️ Only {len(model_files)}/18 models found, downloading...")
+    else:
+        print("   Models directory doesn't exist, creating and downloading...")
     
     print("📥 Downloading models from Dropbox...")
     
     DROPBOX_URL = "https://www.dropbox.com/scl/fi/1qhklwrp1qxe8cvsa0zf9/models.zip?rlkey=69s5wrz9kjg9dkb7yhkjz45xa&st=djrc963c&dl=1"
     
     try:
-        print("Downloading... (this may take 5-10 minutes)")
+        print("⏬ Starting download... (this may take 5-10 minutes)")
         
         response = requests.get(DROPBOX_URL, stream=True)
+        response.raise_for_status()  # Raise error for bad status codes
+        
+        print(f"   Download response status: {response.status_code}")
         
         with open("models.zip", 'wb') as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
         
         print("✅ Download complete!")
+        print("📦 Extracting models.zip...")
         
         # Extract
         with zipfile.ZipFile("models.zip", 'r') as z:
             z.extractall('.')
+        
+        print(f"   Extracted {len(z.namelist())} files")
         os.remove("models.zip")
-        print("✅ Models ready!")
+        
+        # Verify
+        model_files = list(models_dir.glob('*.keras'))
+        print(f"✅ Models ready! ({len(model_files)} files found)")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"❌ Download Error: {e}")
+        import traceback
+        traceback.print_exc()
 
 # Paths
 BASE_DIR = Path('.')
@@ -262,14 +284,27 @@ def main():
     # Load resources
     load_resources()
     
-    # Get bot token
+    # Get bot token from environment
     TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
     
     if not TOKEN:
-        raise ValueError("❌ TELEGRAM_BOT_TOKEN must be set in environment variables!")
+        raise ValueError("❌ TELEGRAM_BOT_TOKEN environment variable is not set!")
+    
+    # Validate token length (Telegram tokens are typically 45-46 characters)
+    if len(TOKEN) < 45:
+        raise ValueError(
+            f"❌ TELEGRAM_BOT_TOKEN appears to be truncated!\n"
+            f"   Current length: {len(TOKEN)} characters\n"
+            f"   Expected: 45+ characters\n"
+            f"   Token starts with: {TOKEN[:20]}...\n"
+            f"   Please check your environment variable on Render!"
+        )
+    
+    print(f"✅ Token validated (length: {len(TOKEN)} characters)")
     
     # Create application
     application = Application.builder().token(TOKEN).build()
+
     
     # Add handlers
     application.add_handler(CommandHandler("start", start))
