@@ -16,7 +16,7 @@ from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 # Flask for health check
-from flask import Flask
+from flask import Flask, request
 
 # Download models from Dropbox
 def download_models_from_dropbox():
