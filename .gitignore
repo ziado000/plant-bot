@@ -1,0 +1,6 @@
+.env
+analytics.db
+*.pyc
+__pycache__/
+models/
+*.zip

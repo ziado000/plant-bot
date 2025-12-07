@@ -1,0 +1,139 @@
+{
+    "banana_fruits": {
+        "0": "Banana Fruit-Scarring Beetle",
+        "1": "Banana Skipper Damage",
+        "2": "Banana Split Peel",
+        "3": "Healthy Banana"
+    },
+    "banana_leaves": {
+        "0": "Anthracnose",
+        "1": "Banana Fruit-Scarring Beetle",
+        "2": "Banana Skipper Damage",
+        "3": "Banana Split Peel",
+        "4": "Black and Yellow Sigatoka",
+        "5": "Chewing insect damage on banana leaf",
+        "6": "Healthy Banana",
+        "7": "Healthy Banana  leaf",
+        "8": "Panama Wilt Disease",
+        "9": "Panama_Disease"
+    },
+    "bean_leaves": {
+        "0": "angular_leaf_spot",
+        "1": "bean_rust",
+        "2": "healthy"
+    },
+    "cabbage_leaves": {
+        "0": "Alternaria_spot",
+        "1": "Black_rot",
+        "2": "downy_mildew",
+        "3": "healthy"
+    },
+    "citrus_fruits": {
+        "0": "Black spot",
+        "1": "Canker",
+        "2": "Greening",
+        "3": "Healthy",
+        "4": "Scab"
+    },
+    "citrus_leaves": {
+        "0": "Black spot",
+        "1": "Canker",
+        "2": "Greening",
+        "3": "Melanose",
+        "4": "Scab",
+        "5": "healthy"
+    },
+    "corn_leaves": {
+        "0": "Blight",
+        "1": "Common_Rust",
+        "2": "Gray_Leaf_Spot",
+        "3": "healthy"
+    },
+    "cucumber_leaves": {
+        "0": "Ill_cucumber",
+        "1": "good_Cucumber"
+    },
+    "date_palm_leaves": {
+        "0": "1. Potassium Deficiency",
+        "1": "2. Manganese Deficiency",
+        "2": "3. Magnesium Deficiency",
+        "3": "4. Black Scorch",
+        "4": "5. Leaf Spots",
+        "5": "6. Fusarium Wilt",
+        "6": "7. Rachis Blight",
+        "7": "8. Parlatoria Blanchardi",
+        "8": "brown spots",
+        "9": "healthy",
+        "10": "white scale"
+    },
+    "eggplant_leaves": {
+        "0": "Healthy Leaf",
+        "1": "Insect Pest Disease",
+        "2": "Leaf Spot Disease",
+        "3": "Mosaic Virus Disease",
+        "4": "Small Leaf Disease",
+        "5": "White Mold Disease",
+        "6": "Wilt Disease"
+    },
+    "grape_leaves": {
+        "0": "Black Rot",
+        "1": "ESCA",
+        "2": "Leaf Blight",
+        "3": "healthy"
+    },
+    "lettuce_leaves": {
+        "0": "Bacterial",
+        "1": "Downy_mildew_on_lettuce",
+        "2": "Healthy",
+        "3": "Powdery_mildew_on_lettuce",
+        "4": "Septoria_blight_on_lettuce",
+        "5": "Shepherd_purse_weeds",
+        "6": "Viral",
+        "7": "Wilt_and_leaf_blight_on_lettuce",
+        "8": "healthy"
+    },
+    "mango_leaves": {
+        "0": "Anthracnose",
+        "1": "Bacterial Canker",
+        "2": "Cutting Weevil",
+        "3": "Die Back",
+        "4": "Gall Midge",
+        "5": "Powdery Mildew",
+        "6": "Sooty Mould",
+        "7": "healthy"
+    },
+    "pepper_leaves": {
+        "0": "Pepper,_bell___Bacterial_spot",
+        "1": "Pepper,_bell___healthy"
+    },
+    "pomegranate_fruits": {
+        "0": "Alternaria",
+        "1": "Anthracnose",
+        "2": "Bacterial_Blight",
+        "3": "Cercospora",
+        "4": "healthy"
+    },
+    "potato_leaves": {
+        "0": "Potato___Early_blight",
+        "1": "Potato___Late_blight",
+        "2": "Potato___healthy"
+    },
+    "tomato_leaves": {
+        "0": "Bacterial_spot",
+        "1": "Early_blight",
+        "2": "Late_blight",
+        "3": "Leaf_Mold",
+        "4": "Septoria_leaf_spot",
+        "5": "Spider_mites Two-spotted_spider_mite",
+        "6": "Target_Spot",
+        "7": "Tomato_Yellow_Leaf_Curl_Virus",
+        "8": "Tomato_mosaic_virus",
+        "9": "healthy",
+        "10": "powdery_mildew"
+    },
+    "wheat_leaves": {
+        "0": "healthy",
+        "1": "septoria",
+        "2": "stripe_rust"
+    }
+}
