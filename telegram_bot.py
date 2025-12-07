@@ -9,10 +9,14 @@ from io import BytesIO
 from collections import OrderedDict
 import gc
 import zipfile
+import threading
 
 # Telegram imports
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+
+# Flask for health check
+from flask import Flask
 
 # Download models from Dropbox
 def download_models_from_dropbox():
@@ -263,10 +267,33 @@ def main():
     # Load resources
     load_resources()
     
-    # Get bot token from environment
-    TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '8377273607:AAF7Dsh5bgoMrddLKTBh5OGLgt5HFeNIoSM')
+    # Get bot token from environment variable ONLY
+    TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
     
-    # Create application
+    if not TOKEN:
+        raise ValueError("❌ TELEGRAM_BOT_TOKEN must be set in environment variables!")
+    
+    # Flask health check server (for Render)
+    app = Flask(__name__)
+    
+    @app.route('/health')
+    def health():
+        return 'OK', 200
+    
+    @app.route('/')
+    def index():
+        return 'Telegram Bot is running!', 200
+    
+    # Start Flask in background thread
+    def run_flask():
+        port = int(os.environ.get('PORT', 10000))
+        app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
+    
+    flask_thread = threading.Thread(target=run_flask, daemon=True)
+    flask_thread.start()
+    print(f"✅ Health check server started on port {os.environ.get('PORT', 10000)}")
+    
+    # Create Telegram application
     application = Application.builder().token(TOKEN).build()
     
     # Add handlers
@@ -275,7 +302,7 @@ def main():
     application.add_handler(MessageHandler(filters.PHOTO, handle_photo))
     
     # Start bot
-    print("✅ Bot started successfully!")
+    print("✅ Telegram bot started successfully!")
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == '__main__':
