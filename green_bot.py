@@ -144,9 +144,15 @@ user_sessions = {}
 
 @app.route('/whatsapp', methods=['POST'])
 def whatsapp_reply():
-    incoming_msg = request.values.get('Body', '').strip().lower()
-    sender = request.values.get('From', '')
-    num_media = int(request.values.get('NumMedia', 0))
+    try:
+        print("🔵 Request received!")
+        incoming_msg = request.values.get('Body', '').strip().lower()
+        sender = request.values.get('From', '')
+        num_media = int(request.values.get('NumMedia', 0))
+        
+        print(f"📱 From: {sender}")
+        print(f"📝 Message: {incoming_msg}")
+        print(f"📸 Media count: {num_media}")
     
     resp = MessagingResponse()
     msg = resp.message()
@@ -267,6 +273,14 @@ def whatsapp_reply():
     # FALLBACK
     msg.body("🤖 لم أفهم رسالتك. أرسل 'هلا' للبدء.")
     return str(resp)
+    
+    except Exception as e:
+        print(f"🔴 CRITICAL ERROR in whatsapp_reply: {e}")
+        import traceback
+        traceback.print_exc()
+        resp = MessagingResponse()
+        resp.message("❌ حدث خطأ. حاول مرة أخرى.")
+        return str(resp)
 
 @app.route('/health')
 def health():
