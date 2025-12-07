@@ -21,17 +21,30 @@ def download_models_from_drive():
         print("✅ Models exist")
         return
     
-    print("📥 Downloading models...")
-    FILE_ID = "11-roxByuAoh1uQuVRz9c2t36L2L18EOVu"  # Replace with your Google Drive file ID
+    print("📥 Downloading models from Dropbox...")
+    
+    # Your Dropbox direct download link
+    DROPBOX_URL = "https://www.dropbox.com/scl/fi/1qhklwrp1qxe8cvsa0zf9/models.zip?rlkey=69s5wrz9kjg9dkb7yhkjz45xa&st=djrc963c&dl=1"
     
     try:
-        url = f"https://drive.google.com/uc?id={FILE_ID}"
-        gdown.download(url, "models.zip", quiet=False)
+        # Download directly with requests
+        import requests
+        print("Downloading... (this may take 5-10 minutes)")
         
+        response = requests.get(DROPBOX_URL, stream=True)
+        
+        with open("models.zip", 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        
+        print("✅ Download complete!")
+        
+        # Extract
         with zipfile.ZipFile("models.zip", 'r') as z:
             z.extractall('.')
         os.remove("models.zip")
         print("✅ Models ready!")
+        
     except Exception as e:
         print(f"❌ Error: {e}")
 
@@ -234,3 +247,4 @@ def health():
 if __name__ == '__main__':
     load_resources()
     app.run(port=5000)
+
