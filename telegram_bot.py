@@ -28,7 +28,7 @@ def download_models_from_dropbox():
     print("📥 Downloading models from Dropbox...")
     
     # Your Dropbox direct download link (change dl=0 to dl=1)
-    DROPBOX_URL = "https://www.dropbox.com/scl/fi/1qhklwrp1qxe8cvsa0zf9/models.zip?rlkey=69s5wrz9kjg9dkb7yhkjz45xa&st=djrc963c&dl=1"  # Replace with your Dropbox link
+    DROPBOX_URL = "https://www.dropbox.com/scl/fi/1qhklwrp1qxe8cvsa0zf9/models.zip?rlkey=69s5wrz9kjg9dkb7yhkjz45xa&st=djrc963c&dl=1"
     
     try:
         print("Downloading... (this may take 5-10 minutes)")
@@ -278,7 +278,7 @@ def main():
     
     # Get port and webhook URL
     PORT = int(os.environ.get('PORT', 10000))
-    WEBHOOK_URL = os.environ.get('WEBHOOK_URL', 'https://plant-bot-bmtr.onrender.com')
+    WEBHOOK_URL = os.environ.get('WEBHOOK_URL', 'https://plant-bot-yqxl.onrender.com')
     
     # Create Telegram application
     application = Application.builder().token(TOKEN).build()
