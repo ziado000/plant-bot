@@ -228,25 +228,38 @@ def whatsapp_reply():
                 return str(resp)
             
             img_data = response.content
+            print(f"   ✅ Downloaded {len(img_data)} bytes")
             
             model = get_model(current_crop)
             if not model:
                 msg.body("❌ عذراً، هذا الموديل غير متوفر حالياً.")
                 return str(resp)
                 
+            print(f"🔬 Analyzing image...")
             diagnosis, conf = predict_image(model, img_data, current_crop)
+            print(f"   ✅ Result: {diagnosis} ({conf:.1f}%)")
             
+            # Build result text
             result_text = f"🔍 *التشخيص:* {diagnosis}\n🎯 *الدقة:* {conf:.1f}%\n\n"
             
             if conf < 60:
                 result_text += "⚠️ *ملاحظة:* لست متأكداً تماماً. يرجى استشارة مهندس زراعي."
             else:
                 result_text += "✅ *التشخيص موثوق.*"
-                
-            msg.body(result_text)
+            
+            # Send reply with error handling
+            try:
+                msg.body(result_text)
+                print(f"✅ Sent reply successfully")
+            except Exception as reply_error:
+                print(f"❌ Failed to send reply: {reply_error}")
+                # Try simpler message
+                msg.body(f"التشخيص: {diagnosis}\nالدقة: {conf:.1f}%")
             
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"❌ Error during processing: {e}")
+            import traceback
+            traceback.print_exc()
             msg.body("❌ حدث خطأ أثناء تحليل الصورة. حاول مرة أخرى.")
             
         return str(resp)
