@@ -32,7 +32,7 @@ def download_models_from_dropbox():
     else:
         print("   Models directory doesn't exist, creating and downloading...")
     
-    print("📥 Downloading models from Hugging Face...")
+    print("📥 Downloading models from Hugging Face....")
     
     HUGGINGFACE_URL = "https://huggingface.co/ziadabdullah/saudi-plant-disease-models/resolve/main/models.zip"
     
@@ -317,3 +317,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
