@@ -1,0 +1,133 @@
+{
+    "banana_fruits": {
+        "Banana Fruit-Scarring Beetle": "خنفساء تندب الموز (Scarring Beetle)",
+        "Banana Skipper Damage": "ضرر الفراشة (Skipper Damage)",
+        "Banana Split Peel": "تشقق القشرة (Split Peel)",
+        "Healthy Banana": "موز سليم (Healthy)"
+    },
+    "banana_leaves": {
+        "Anthracnose": "الأنثراكنوز (Anthracnose)",
+        "Banana Fruit-Scarring Beetle": "خنفساء تندب الموز (Scarring Beetle)",
+        "Banana Skipper Damage": "ضرر الفراشة (Skipper Damage)",
+        "Banana Split Peel": "تشقق القشرة (Split Peel)",
+        "Black and Yellow Sigatoka": "سيغاتوكا الأسود والأصفر (Black & Yellow Sigatoka)",
+        "Chewing insect damage on banana leaf": "ضرر حشري (Insect Damage)",
+        "Healthy Banana": "موز سليم (Healthy)",
+        "Healthy Banana  leaf": "ورقة موز سليمة (Healthy Leaf)",
+        "Panama Wilt Disease": "مرض ذبول بنما (Panama Wilt)",
+        "Panama_Disease": "مرض بنما (Panama Disease)"
+    },
+    "bean_leaves": {
+        "angular_leaf_spot": "تبقع الأوراق الزاوي (Angular Leaf Spot)",
+        "bean_rust": "صدأ الفاصوليا (Bean Rust)",
+        "healthy": "سليمة (Healthy)"
+    },
+    "cabbage_leaves": {
+        "Alternaria_spot": "تبقع الألترناريا (Alternaria Spot)",
+        "Black_rot": "العفن الأسود (Black Rot)",
+        "downy_mildew": "البياض الزغبي (Downy Mildew)",
+        "healthy": "سليمة (Healthy)"
+    },
+    "citrus_fruits": {
+        "Black spot": "التبقع الأسود (Black Spot)",
+        "Canker": "التقرح البكتيري (Canker)",
+        "Greening": "الاصفرار (Greening)",
+        "Healthy": "سليمة (Healthy)",
+        "Scab": "الجرب (Scab)"
+    },
+    "citrus_leaves": {
+        "Black spot": "التبقع الأسود (Black Spot)",
+        "Canker": "التقرح البكتيري (Canker)",
+        "Greening": "الاصفرار (Greening)",
+        "Melanose": "الميلانوز (Melanose)",
+        "Scab": "الجرب (Scab)",
+        "healthy": "سليمة (Healthy)"
+    },
+    "corn_leaves": {
+        "Blight": "لفحة الذرة (Blight)",
+        "Common_Rust": "الصدأ العادي (Common Rust)",
+        "Gray_Leaf_Spot": "تبقع الأوراق الرمادي (Gray Leaf Spot)",
+        "healthy": "سليمة (Healthy)"
+    },
+    "cucumber_leaves": {
+        "good_Cucumber": "سليمة (Healthy)",
+        "scab_Cucumber": "الجرب (Scab)"
+    },
+    "date_palm_leaves": {
+        "brown_spots": "البقع البنية (Brown Spots)",
+        "healthy": "سليمة (Healthy)",
+        "white_scale": "القشرية البيضاء (White Scale)",
+        "wilt_disease": "الذبول (Wilt)",
+        "yellow_spots": "البقع الصفراء (Yellow Spots)"
+    },
+    "eggplant_leaves": {
+        "Healthy Leaf": "سليمة (Healthy)",
+        "Insect Pest Disease": "إصابة حشرية (Insect Pest)",
+        "Leaf Spot Disease": "تبقع الأوراق (Leaf Spot)",
+        "Mosaic Virus Disease": "فيروس الموزاييك (Mosaic Virus)",
+        "Small Leaf Disease": "مرض الورقة الصغيرة (Small Leaf)",
+        "White Mold Disease": "العفن الأبيض (White Mold)",
+        "Wilt Disease": "الذبول (Wilt)"
+    },
+    "grape_leaves": {
+        "Black Rot": "العفن الأسود (Black Rot)",
+        "ESCA": "مرض إيسكا (Esca)",
+        "Leaf Blight": "لفحة الأوراق (Leaf Blight)",
+        "healthy": "سليمة (Healthy)"
+    },
+    "lettuce_leaves": {
+        "Bacterial": "إصابة بكتيرية (Bacterial)",
+        "Downy_mildew_on_lettuce": "البياض الزغبي (Downy Mildew)",
+        "Healthy": "سليمة (Healthy)",
+        "Powdery_mildew_on_lettuce": "البياض الدقيقي (Powdery Mildew)",
+        "Septoria_blight_on_lettuce": "لفحة سبتورا (Septoria Blight)",
+        "Shepherd_purse_weeds": "أعشاب ضارة (Weeds)",
+        "Viral": "إصابة فيروسية (Viral)",
+        "Wilt_and_leaf_blight_on_lettuce": "ذبول ولفحة (Wilt & Blight)",
+        "healthy": "سليمة (Healthy)"
+    },
+    "mango_leaves": {
+        "Anthracnose": "الأنثراكنوز (Anthracnose)",
+        "Bacterial Canker": "التقرح البكتيري (Bacterial Canker)",
+        "Cutting Weevil": "سوسة القطع (Cutting Weevil)",
+        "Die Back": "الموت الرجعي (Die Back)",
+        "Gall Midge": "ذبابة العفص (Gall Midge)",
+        "Powdery Mildew": "البياض الدقيقي (Powdery Mildew)",
+        "Sooty Mould": "العفن الهبابي (Sooty Mould)",
+        "healthy": "سليمة (Healthy)"
+    },
+    "pepper_leaves": {
+        "Bacterial_spot": "تبقع بكتيري (Bacterial Spot)",
+        "healthy": "سليمة (Healthy)"
+    },
+    "pomegranate_fruits": {
+        "Alternaria": "الألترناريا (Alternaria)",
+        "Anthracnose": "الأنثراكنوز (Anthracnose)",
+        "Bacterial_Blight": "اللفحة البكتيرية (Bacterial Blight)",
+        "Cercospora": "تبقع سيركسبورا (Cercospora)",
+        "healthy": "سليمة (Healthy)"
+    },
+    "potato_leaves": {
+        "Potato___Early_blight": "اللفحة المبكرة (Early Blight)",
+        "Potato___Late_blight": "اللفحة المتأخرة (Late Blight)",
+        "Potato___healthy": "سليمة (Healthy)"
+    },
+    "tomato_leaves": {
+        "Bacterial_spot": "تبقع بكتيري (Bacterial Spot)",
+        "Early_blight": "اللفحة المبكرة (Early Blight)",
+        "Late_blight": "اللفحة المتأخرة (Late Blight)",
+        "Leaf_Mold": "عفن الأوراق (Leaf Mold)",
+        "Septoria_leaf_spot": "تبقع الأوراق السبتوري (Septoria)",
+        "Spider_mites Two-spotted_spider_mite": "العناكب (Spider Mites)",
+        "Target_Spot": "التبقع المستهدف (Target Spot)",
+        "Tomato_Yellow_Leaf_Curl_Virus": "تجعد واصفرار الأوراق (Yellow Leaf Curl)",
+        "Tomato_mosaic_virus": "فيروس الموزاييك (Mosaic Virus)",
+        "healthy": "سليمة (Healthy)",
+        "powdery_mildew": "البياض الدقيقي (Powdery Mildew)"
+    },
+    "wheat_leaves": {
+        "healthy": "سليمة (Healthy)",
+        "septoria": "السبتوري (Septoria)",
+        "stripe_rust": "الصدأ المخطط (Stripe Rust)"
+    }
+}
