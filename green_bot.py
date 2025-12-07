@@ -153,9 +153,9 @@ def whatsapp_reply():
         print(f"📱 From: {sender}")
         print(f"📝 Message: {incoming_msg}")
         print(f"📸 Media count: {num_media}")
-    
-    resp = MessagingResponse()
-    msg = resp.message()
+        
+        resp = MessagingResponse()
+        msg = resp.message()
     
     # GREETING
     if incoming_msg in ['hi', 'hello', 'هلا', 'سلام', 'بداية', 'start', 'menu']:
@@ -270,10 +270,10 @@ def whatsapp_reply():
             
         return str(resp)
 
-    # FALLBACK
-    msg.body("🤖 لم أفهم رسالتك. أرسل 'هلا' للبدء.")
-    return str(resp)
-    
+        # FALLBACK
+        msg.body("🤖 لم أفهم رسالتك. أرسل 'هلا' للبدء.")
+        return str(resp)
+        
     except Exception as e:
         print(f"🔴 CRITICAL ERROR in whatsapp_reply: {e}")
         import traceback
