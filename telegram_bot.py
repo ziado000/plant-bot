@@ -166,13 +166,23 @@ def predict_image(model, img_data, model_name):
     indices = class_indices.get(model_name, {})
     english_label = indices.get(str(predicted_class_idx), f"Class_{predicted_class_idx}")
     
-    crop_name = model_name.replace('_', ' ').title()
-    arabic_label = english_label
+    # Get bilingual label (Arabic + English)
+    bilingual_label = english_label  # Default to English only
     
-    if crop_name in translations and english_label in translations[crop_name]:
-        arabic_label = translations[crop_name][english_label]
+    # Try to find translation with both languages
+    if model_name in translations and english_label in translations[model_name]:
+        bilingual_label = translations[model_name][english_label]
+    else:
+        # If exact match not found, try lowercase version
+        english_lower = english_label.lower().replace(' ', '_')
+        if model_name in translations and english_lower in translations[model_name]:
+            bilingual_label = translations[model_name][english_lower]
+    
+    # If translation doesn't include English in parentheses, add it
+    if english_label not in bilingual_label and '(' not in bilingual_label:
+        bilingual_label = f"{bilingual_label} ({english_label})"
         
-    return arabic_label, confidence
+    return bilingual_label, confidence
 
 # Telegram Bot Handlers
 
@@ -320,8 +330,19 @@ def main():
     
     print(f"✅ Token validated (length: {len(TOKEN)} characters)")
     
-    # Create application
-    application = Application.builder().token(TOKEN).build()
+    # Create application with increased timeouts for slower networks
+    from telegram.request import HTTPXRequest
+    
+    # Configure request with longer timeouts (Render can be slow)
+    request = HTTPXRequest(
+        connection_pool_size=8,
+        connect_timeout=30.0,    # 30 seconds to connect
+        read_timeout=60.0,       # 60 seconds to read data
+        write_timeout=60.0,      # 60 seconds to write data
+        pool_timeout=30.0        # 30 seconds to get connection from pool
+    )
+    
+    application = Application.builder().token(TOKEN).request(request).build()
 
     
     # Add handlers
