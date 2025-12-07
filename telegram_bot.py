@@ -276,25 +276,9 @@ def main():
     if not TOKEN:
         raise ValueError("❌ TELEGRAM_BOT_TOKEN must be set in environment variables!")
     
-    # Flask health check server (for Render)
-    app = Flask(__name__)
-    
-    @app.route('/health')
-    def health():
-        return 'OK', 200
-    
-    @app.route('/')
-    def index():
-        return 'Telegram Bot is running!', 200
-    
-    # Start Flask in background thread
-    def run_flask():
-        port = int(os.environ.get('PORT', 10000))
-        app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
-    
-    flask_thread = threading.Thread(target=run_flask, daemon=True)
-    flask_thread.start()
-    print(f"✅ Health check server started on port {os.environ.get('PORT', 10000)}")
+    # Get port and webhook URL
+    PORT = int(os.environ.get('PORT', 10000))
+    WEBHOOK_URL = os.environ.get('WEBHOOK_URL', 'https://plant-bot-bmtr.onrender.com')
     
     # Create Telegram application
     application = Application.builder().token(TOKEN).build()
@@ -304,9 +288,43 @@ def main():
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(MessageHandler(filters.PHOTO, handle_photo))
     
-    # Start bot
-    print("✅ Telegram bot started successfully!")
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
+    # Flask app for webhook
+    app = Flask(__name__)
+    
+    @app.route('/')
+    def index():
+        return 'Telegram Bot is running!', 200
+    
+    @app.route('/health')
+    def health():
+        return 'OK', 200
+    
+    @app.route(f'/{TOKEN}', methods=['POST'])
+    async def telegram_webhook():
+        """Handle incoming updates via webhook"""
+        try:
+            update = Update.de_json(request.get_json(force=True), application.bot)
+            await application.process_update(update)
+            return 'OK'
+        except Exception as e:
+            print(f"❌ Webhook error: {e}")
+            return 'Error', 500
+    
+    # Set webhook
+    async def set_webhook():
+        webhook_url = f"{WEBHOOK_URL}/{TOKEN}"
+        await application.bot.set_webhook(url=webhook_url)
+        print(f"✅ Webhook set to: {webhook_url}")
+    
+    # Initialize bot
+    import asyncio
+    asyncio.run(set_webhook())
+    
+    print(f"✅ Telegram bot started with webhook!")
+    print(f"✅ Server running on port {PORT}")
+    
+    # Run Flask app
+    app.run(host='0.0.0.0', port=PORT, debug=False)
 
 if __name__ == '__main__':
     main()
