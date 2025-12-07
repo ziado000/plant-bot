@@ -245,15 +245,18 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         diagnosis, conf = predict_image(model, img_data, current_crop)
         print(f"   ✅ Result: {diagnosis} ({conf:.1f}%)")
         
-        # Build result
-        result_text = f"🔍 *التشخيص:* {diagnosis}\n🎯 *الدقة:* {conf:.1f}%\n\n"
+        # Escape HTML special characters in diagnosis
+        diagnosis_escaped = diagnosis.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+        
+        # Build result with HTML formatting
+        result_text = f"🔍 <b>التشخيص:</b> {diagnosis_escaped}\n🎯 <b>الدقة:</b> {conf:.1f}%\n\n"
         
         if conf < 60:
-            result_text += "⚠️ *ملاحظة:* لست متأكداً تماماً. يرجى استشارة مهندس زراعي."
+            result_text += "⚠️ <b>ملاحظة:</b> لست متأكداً تماماً. يرجى استشارة مهندس زراعي."
         else:
-            result_text += "✅ *التشخيص موثوق.*"
+            result_text += "✅ <b>التشخيص موثوق.</b>"
         
-        await update.message.reply_text(result_text, parse_mode='Markdown')
+        await update.message.reply_text(result_text, parse_mode='HTML')
         print(f"✅ Sent reply to user {user_id}")
         
     except Exception as e:
