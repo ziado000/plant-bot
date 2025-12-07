@@ -10,12 +10,14 @@ from PIL import Image
 from io import BytesIO
 import gdown
 import zipfile
+from collections import OrderedDict
+import gc
 
 # --- CONFIGURATION ---
 app = Flask(__name__)
 
-# Download models from Google Drive
-def download_models_from_drive():
+# Download models from Dropbox
+def download_models_from_dropbox():
     models_dir = Path('models')
     if models_dir.exists() and len(list(models_dir.glob('*.keras'))) >= 18:
         print("✅ Models exist")
@@ -23,12 +25,10 @@ def download_models_from_drive():
     
     print("📥 Downloading models from Dropbox...")
     
-    # Your Dropbox direct download link
-    DROPBOX_URL = "https://www.dropbox.com/scl/fi/1qhklwrp1qxe8cvsa0zf9/models.zip?rlkey=69s5wrz9kjg9dkb7yhkjz45xa&st=djrc963c&dl=1"
+    # Your Dropbox direct download link (change dl=0 to dl=1)
+    DROPBOX_URL = "https://www.dropbox.com/scl/fi/1qhklwrp1qxe8cvsa0zf9/models.zip?rlkey=69s5wrz9kjg9dkb7yhkjz45xa&st=djrc963c&dl=1"  # Replace with your Dropbox link
     
     try:
-        # Download directly with requests
-        import requests
         print("Downloading... (this may take 5-10 minutes)")
         
         response = requests.get(DROPBOX_URL, stream=True)
@@ -53,7 +53,7 @@ BASE_DIR = Path('.')
 MODELS_DIR = BASE_DIR / 'models'
 
 # Download models on startup
-download_models_from_drive()
+download_models_from_dropbox()
 
 # Check for local files
 if Path('disease_translations.json').exists():
@@ -66,8 +66,9 @@ if Path('class_indices.json').exists():
 else:
     INDICES_FILE = BASE_DIR / 'class_indices.json'
 
-# Global Cache
-loaded_models = {}
+# Global Cache with LRU
+MAX_MODELS = 10  # Keep max 10 models in memory
+loaded_models = OrderedDict()
 class_indices = {}
 translations = {}
 
@@ -85,9 +86,14 @@ def load_resources():
             class_indices = json.load(f)
         print(f"✅ Class Indices Loaded: {len(class_indices)} models")
 
-# --- MODEL LOADING ---
+# --- MODEL LOADING WITH LRU CACHE ---
 def get_model(model_name):
+    """Load model with LRU cache - keeps max 10 models in memory"""
+    
+    # If already loaded, move to end (most recent)
     if model_name in loaded_models:
+        loaded_models.move_to_end(model_name)
+        print(f"♻️ Using cached model: {model_name}")
         return loaded_models[model_name]
     
     model_path = MODELS_DIR / f"{model_name}_final.keras"
@@ -96,10 +102,19 @@ def get_model(model_name):
         print(f"❌ Model not found: {model_path}")
         return None
     
-    print(f"📥 Loading model: {model_name}...")
+    # Remove oldest model if at limit
+    if len(loaded_models) >= MAX_MODELS:
+        oldest = next(iter(loaded_models))
+        print(f"🗑️ Removing old model: {oldest} (freeing memory)")
+        del loaded_models[oldest]
+        gc.collect()  # Force garbage collection
+    
+    # Load new model
+    print(f"📥 Loading model: {model_name}... ({len(loaded_models)+1}/{MAX_MODELS})")
     model = tf.keras.models.load_model(model_path)
     loaded_models[model_name] = model
     print(f"✅ Model loaded: {model_name}")
+    
     return model
 
 # --- PREDICTION ---
@@ -247,4 +262,3 @@ def health():
 if __name__ == '__main__':
     load_resources()
     app.run(port=5000)
-
