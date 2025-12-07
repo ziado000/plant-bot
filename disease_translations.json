@@ -50,8 +50,8 @@
         "healthy": "سليمة (Healthy)"
     },
     "cucumber_leaves": {
-        "good_Cucumber": "سليمة (Healthy)",
-        "scab_Cucumber": "الجرب (Scab)"
+        "Ill_cucumber": "خيار مريض (Diseased)",
+        "good_Cucumber": "سليمة (Healthy)"
     },
     "date_palm_leaves": {
         "brown_spots": "البقع البنية (Brown Spots)",
