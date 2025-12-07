@@ -32,14 +32,14 @@ def download_models_from_dropbox():
     else:
         print("   Models directory doesn't exist, creating and downloading...")
     
-    print("📥 Downloading models from Dropbox...")
+    print("📥 Downloading models from Hugging Face...")
     
-    DROPBOX_URL = "https://www.dropbox.com/scl/fi/1qhklwrp1qxe8cvsa0zf9/models.zip?rlkey=69s5wrz9kjg9dkb7yhkjz45xa&st=djrc963c&dl=1"
+    HUGGINGFACE_URL = "https://huggingface.co/ziadabdullah/saudi-plant-disease-models/resolve/main/models.zip"
     
     try:
         print("⏬ Starting download... (this may take 5-10 minutes)")
         
-        response = requests.get(DROPBOX_URL, stream=True)
+        response = requests.get(HUGGINGFACE_URL, stream=True)
         response.raise_for_status()  # Raise error for bad status codes
         
         print(f"   Download response status: {response.status_code}")
