@@ -159,8 +159,11 @@ def whatsapp_reply():
         
         # GREETING
         if incoming_msg in ['hi', 'hello', 'هلا', 'سلام', 'بداية', 'start', 'menu']:
+            print("✅ Greeting matched!")
             user_sessions.pop(sender, None)
-            msg.body("🌿 *أهلاً بك في طبيب النباتات السعودي!* 🇸🇦\n\nاختر المحصول (أرسل الرقم): 👇\n\n" +
+            print("✅ Session cleared")
+            
+            menu_text = ("🌿 *أهلاً بك في طبيب النباتات السعودي!* 🇸🇦\n\nاختر المحصول (أرسل الرقم): 👇\n\n" +
                      "1. 🌴 نخيل - أوراق\n" +
                      "2. 🍊 حمضيات - ثمار\n" +
                      "3. 🍃 حمضيات - أوراق\n" +
@@ -179,7 +182,13 @@ def whatsapp_reply():
                      "16. 🍆 باذنجان - أوراق\n" +
                      "17. 🥗 ملفوف - أوراق\n" +
                      "18. 🌶️ فلفل - أوراق")
-            return str(resp)
+            
+            print(f"✅ Menu text prepared ({len(menu_text)} chars)")
+            msg.body(menu_text)
+            print("✅ Message body set")
+            result = str(resp)
+            print(f"✅ Response prepared ({len(result)} chars)")
+            return result
 
         # CROP SELECTION
         crop_map = {
