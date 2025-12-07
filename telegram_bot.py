@@ -9,14 +9,10 @@ from io import BytesIO
 from collections import OrderedDict
 import gc
 import zipfile
-import threading
 
 # Telegram imports
-from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-
-# Flask for health check
-from flask import Flask, request
 
 # Download models from Dropbox
 def download_models_from_dropbox():
@@ -27,7 +23,6 @@ def download_models_from_dropbox():
     
     print("📥 Downloading models from Dropbox...")
     
-    # Your Dropbox direct download link (change dl=0 to dl=1)
     DROPBOX_URL = "https://www.dropbox.com/scl/fi/1qhklwrp1qxe8cvsa0zf9/models.zip?rlkey=69s5wrz9kjg9dkb7yhkjz45xa&st=djrc963c&dl=1"
     
     try:
@@ -74,7 +69,7 @@ loaded_models = OrderedDict()
 class_indices = {}
 translations = {}
 
-# User sessions: {user_id: selected_crop}
+# User sessions
 user_sessions = {}
 
 # Load resources
@@ -161,10 +156,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=False)
     
     await update.message.reply_text(
-        "🌿 *أهلاً بك في طبيب النباتات السعودي!* 🇸🇦\n\n"
+        "🌿 أهلاً بك في طبيب النباتات السعودي! 🇸🇦\n\n"
         "اختر المحصول من القائمة:",
-        reply_markup=reply_markup,
-        parse_mode='Markdown'
+        reply_markup=reply_markup
     )
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -201,9 +195,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         sample_type = 'الثمرة' if 'fruits' in selected_crop else 'الورقة'
         
         await update.message.reply_text(
-            f"✅ تم اختيار: *{text}*\n\n"
-            f"📸 *الآن، أرسل صورة {sample_type} المصابة.*",
-            parse_mode='Markdown'
+            f"✅ تم اختيار: {text}\n\n"
+            f"📸 الآن، أرسل صورة {sample_type} المصابة."
         )
     else:
         await update.message.reply_text(
@@ -216,8 +209,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     if user_id not in user_sessions:
         await update.message.reply_text(
-            "⚠️ *الرجاء اختيار المحصول أولاً!*\nاضغط /start",
-            parse_mode='Markdown'
+            "⚠️ الرجاء اختيار المحصول أولاً!\nاضغط /start"
         )
         return
     
@@ -225,7 +217,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     try:
         # Get the photo
-        photo = update.message.photo[-1]  # Highest resolution
+        photo = update.message.photo[-1]
         file = await context.bot.get_file(photo.file_id)
         
         # Download image data
@@ -245,10 +237,10 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         diagnosis, conf = predict_image(model, img_data, current_crop)
         print(f"   ✅ Result: {diagnosis} ({conf:.1f}%)")
         
-        # Escape HTML special characters in diagnosis
+        # Escape HTML special characters
         diagnosis_escaped = diagnosis.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
         
-        # Build result with HTML formatting
+        # Build result
         result_text = f"🔍 <b>التشخيص:</b> {diagnosis_escaped}\n🎯 <b>الدقة:</b> {conf:.1f}%\n\n"
         
         if conf < 60:
@@ -270,17 +262,13 @@ def main():
     # Load resources
     load_resources()
     
-    # Get bot token from environment variable ONLY
+    # Get bot token
     TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
     
     if not TOKEN:
         raise ValueError("❌ TELEGRAM_BOT_TOKEN must be set in environment variables!")
     
-    # Get port and webhook URL
-    PORT = int(os.environ.get('PORT', 10000))
-    WEBHOOK_URL = os.environ.get('WEBHOOK_URL', 'https://plant-bot-yqxl.onrender.com')
-    
-    # Create Telegram application
+    # Create application
     application = Application.builder().token(TOKEN).build()
     
     # Add handlers
@@ -288,47 +276,9 @@ def main():
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(MessageHandler(filters.PHOTO, handle_photo))
     
-    # Flask app for webhook
-    app = Flask(__name__)
-    
-    @app.route('/')
-    def index():
-        return 'Telegram Bot is running!', 200
-    
-    @app.route('/health')
-    def health():
-        return 'OK', 200
-    
-    @app.route(f'/{TOKEN}', methods=['POST'])
-    def telegram_webhook():
-        """Handle incoming updates via webhook"""
-        try:
-            update = Update.de_json(request.get_json(force=True), application.bot)
-            # Run async code in sync context
-            import asyncio
-            asyncio.run(application.process_update(update))
-            return 'OK'
-        except Exception as e:
-            print(f"❌ Webhook error: {e}")
-            import traceback
-            traceback.print_exc()
-            return 'Error', 500
-    
-    # Set webhook
-    async def set_webhook():
-        webhook_url = f"{WEBHOOK_URL}/{TOKEN}"
-        await application.bot.set_webhook(url=webhook_url)
-        print(f"✅ Webhook set to: {webhook_url}")
-    
-    # Initialize bot
-    import asyncio
-    asyncio.run(set_webhook())
-    
-    print(f"✅ Telegram bot started with webhook!")
-    print(f"✅ Server running on port {PORT}")
-    
-    # Run Flask app
-    app.run(host='0.0.0.0', port=PORT, debug=False)
+    # Start bot with polling
+    print("✅ Telegram bot started with polling!")
+    application.run_polling(allowed_updates=Update.ALL_TYPES, drop_pending_updates=True)
 
 if __name__ == '__main__':
     main()
