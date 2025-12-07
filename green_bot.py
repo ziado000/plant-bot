@@ -156,46 +156,46 @@ def whatsapp_reply():
         
         resp = MessagingResponse()
         msg = resp.message()
-    
-    # GREETING
-    if incoming_msg in ['hi', 'hello', 'هلا', 'سلام', 'بداية', 'start', 'menu']:
-        user_sessions.pop(sender, None)
-        msg.body("🌿 *أهلاً بك في طبيب النباتات السعودي!* 🇸🇦\n\nاختر المحصول (أرسل الرقم): 👇\n\n" +
-                 "1. 🌴 نخيل - أوراق\n" +
-                 "2. 🍊 حمضيات - ثمار\n" +
-                 "3. 🍃 حمضيات - أوراق\n" +
-                 "4. 🍅 طماطم - أوراق\n" +
-                 "5. 🥔 بطاطس - أوراق\n" +
-                 "6. 🥒 خيار - أوراق\n" +
-                 "7. 🌽 ذرة - أوراق\n" +
-                 "8. 🍇 عنب - أوراق\n" +
-                 "9. 🍎 رمان - ثمار\n" +
-                 "10. 🥬 خس - أوراق\n" +
-                 "11. 🌾 قمح - أوراق\n" +
-                 "12. 🥭 مانجو - أوراق\n" +
-                 "13. 🍌 موز - ثمار\n" +
-                 "14. 🍃 موز - أوراق\n" +
-                 "15. 🫘 فاصوليا - أوراق\n" +
-                 "16. 🍆 باذنجان - أوراق\n" +
-                 "17. 🥗 ملفوف - أوراق\n" +
-                 "18. 🌶️ فلفل - أوراق")
-        return str(resp)
-
-    # CROP SELECTION
-    crop_map = {
-        '1': 'date_palm_leaves', '2': 'citrus_fruits', '3': 'citrus_leaves',
-        '4': 'tomato_leaves', '5': 'potato_leaves', '6': 'cucumber_leaves',
-        '7': 'corn_leaves', '8': 'grape_leaves', '9': 'pomegranate_fruits',
-        '10': 'lettuce_leaves', '11': 'wheat_leaves', '12': 'mango_leaves',
-        '13': 'banana_fruits', '14': 'banana_leaves', '15': 'bean_leaves',
-        '16': 'eggplant_leaves', '17': 'cabbage_leaves', '18': 'pepper_leaves'
-    }
-    
-    if incoming_msg in crop_map:
-        selected_crop = crop_map[incoming_msg]
-        user_sessions[sender] = selected_crop
         
-        crop_display = {
+        # GREETING
+        if incoming_msg in ['hi', 'hello', 'هلا', 'سلام', 'بداية', 'start', 'menu']:
+            user_sessions.pop(sender, None)
+            msg.body("🌿 *أهلاً بك في طبيب النباتات السعودي!* 🇸🇦\n\nاختر المحصول (أرسل الرقم): 👇\n\n" +
+                     "1. 🌴 نخيل - أوراق\n" +
+                     "2. 🍊 حمضيات - ثمار\n" +
+                     "3. 🍃 حمضيات - أوراق\n" +
+                     "4. 🍅 طماطم - أوراق\n" +
+                     "5. 🥔 بطاطس - أوراق\n" +
+                     "6. 🥒 خيار - أوراق\n" +
+                     "7. 🌽 ذرة - أوراق\n" +
+                     "8. 🍇 عنب - أوراق\n" +
+                     "9. 🍎 رمان - ثمار\n" +
+                     "10. 🥬 خس - أوراق\n" +
+                     "11. 🌾 قمح - أوراق\n" +
+                     "12. 🥭 مانجو - أوراق\n" +
+                     "13. 🍌 موز - ثمار\n" +
+                     "14. 🍃 موز - أوراق\n" +
+                     "15. 🫘 فاصوليا - أوراق\n" +
+                     "16. 🍆 باذنجان - أوراق\n" +
+                     "17. 🥗 ملفوف - أوراق\n" +
+                     "18. 🌶️ فلفل - أوراق")
+            return str(resp)
+
+        # CROP SELECTION
+        crop_map = {
+            '1': 'date_palm_leaves', '2': 'citrus_fruits', '3': 'citrus_leaves',
+            '4': 'tomato_leaves', '5': 'potato_leaves', '6': 'cucumber_leaves',
+            '7': 'corn_leaves', '8': 'grape_leaves', '9': 'pomegranate_fruits',
+            '10': 'lettuce_leaves', '11': 'wheat_leaves', '12': 'mango_leaves',
+            '13': 'banana_fruits', '14': 'banana_leaves', '15': 'bean_leaves',
+            '16': 'eggplant_leaves', '17': 'cabbage_leaves', '18': 'pepper_leaves'
+        }
+        
+        if incoming_msg in crop_map:
+            selected_crop = crop_map[incoming_msg]
+            user_sessions[sender] = selected_crop
+            
+            crop_display = {
             'date_palm_leaves': 'نخيل - أوراق', 'citrus_fruits': 'حمضيات - ثمار',
             'citrus_leaves': 'حمضيات - أوراق', 'tomato_leaves': 'طماطم - أوراق',
             'potato_leaves': 'بطاطس - أوراق', 'cucumber_leaves': 'خيار - أوراق',
@@ -205,73 +205,69 @@ def whatsapp_reply():
             'banana_fruits': 'موز - ثمار', 'banana_leaves': 'موز - أوراق',
             'bean_leaves': 'فاصوليا - أوراق', 'eggplant_leaves': 'باذنجان - أوراق',
             'cabbage_leaves': 'ملفوف - أوراق', 'pepper_leaves': 'فلفل - أوراق'
-        }
-        
-        crop_name = crop_display.get(selected_crop, selected_crop)
-        sample_type = 'الثمرة' if 'fruits' in selected_crop else 'الورقة'
-        msg.body(f"✅ تم اختيار: *{crop_name}*.\n\n📸 *الآن، أرسل صورة {sample_type} المصابة.*")
-        return str(resp)
-    
-    # IMAGE HANDLING
-    if num_media > 0:
-        current_crop = user_sessions.get(sender)
-        
-        if not current_crop:
-            msg.body("⚠️ *الرجاء اختيار المحصول أولاً!* \nأرسل كلمة 'هلا' للبدء.")
+            }
+            
+            crop_name = crop_display.get(selected_crop, selected_crop)
+            sample_type = 'الثمرة' if 'fruits' in selected_crop else 'الورقة'
+            msg.body(f"✅ تم اختيار: *{crop_name}*.\n\n📸 *الآن، أرسل صورة {sample_type} المصابة.*")
             return str(resp)
-            
-        image_url = request.values.get('MediaUrl0')
         
-        try:
-            print(f"📥 Downloading: {image_url}")
-            TWILIO_SID = os.getenv('TWILIO_SID')
-            TWILIO_TOKEN = os.getenv('TWILIO_TOKEN')
+        # IMAGE HANDLING
+        if num_media > 0:
+            current_crop = user_sessions.get(sender)
             
-            response = requests.get(image_url, auth=(TWILIO_SID, TWILIO_TOKEN), allow_redirects=True)
-            
-            if response.status_code != 200:
-                msg.body("❌ فشل تحميل الصورة.")
-                return str(resp)
-            
-            img_data = response.content
-            print(f"   ✅ Downloaded {len(img_data)} bytes")
-            
-            model = get_model(current_crop)
-            if not model:
-                msg.body("❌ عذراً، هذا الموديل غير متوفر حالياً.")
+            if not current_crop:
+                msg.body("⚠️ *الرجاء اختيار المحصول أولاً!* \nأرسل كلمة 'هلا' للبدء.")
                 return str(resp)
                 
-            print(f"🔬 Analyzing image...")
-            diagnosis, conf = predict_image(model, img_data, current_crop)
-            print(f"   ✅ Result: {diagnosis} ({conf:.1f}%)")
+            image_url = request.values.get('MediaUrl0')
             
-            # Build result text
-            result_text = f"🔍 *التشخيص:* {diagnosis}\n🎯 *الدقة:* {conf:.1f}%\n\n"
-            
-            if conf < 60:
-                result_text += "⚠️ *ملاحظة:* لست متأكداً تماماً. يرجى استشارة مهندس زراعي."
-            else:
-                result_text += "✅ *التشخيص موثوق.*"
-            
-            # Send reply with error handling
             try:
-                msg.body(result_text)
-                print(f"✅ Sent reply successfully")
-            except Exception as reply_error:
-                print(f"❌ Failed to send reply: {reply_error}")
-                # Try simpler message
-                msg.body(f"التشخيص: {diagnosis}\nالدقة: {conf:.1f}%")
+                print(f"📥 Downloading: {image_url}")
+                TWILIO_SID = os.getenv('TWILIO_SID')
+                TWILIO_TOKEN = os.getenv('TWILIO_TOKEN')
+                
+                response = requests.get(image_url, auth=(TWILIO_SID, TWILIO_TOKEN), allow_redirects=True)
+                
+                if response.status_code != 200:
+                    msg.body("❌ فشل تحميل الصورة.")
+                    return str(resp)
+                
+                img_data = response.content
+                print(f"   ✅ Downloaded {len(img_data)} bytes")
+                
+                model = get_model(current_crop)
+                if not model:
+                    msg.body("❌ عذراً، هذا الموديل غير متوفر حالياً.")
+                    return str(resp)
+                    
+                print(f"🔬 Analyzing image...")
+                diagnosis, conf = predict_image(model, img_data, current_crop)
+                print(f"   ✅ Result: {diagnosis} ({conf:.1f}%)")
+                
+                # Build result text
+                result_text = f"🔍 *التشخيص:* {diagnosis}\n🎯 *الدقة:* {conf:.1f}%\n\n"
+                
+                if conf < 60:
+                    result_text += "⚠️ *ملاحظة:* لست متأكداً تماماً. يرجى استشارة مهندس زراعي."
+                else:
+                    result_text += "✅ *التشخيص موثوق.*"
+                
+                # Send reply with error handling
+                try:
+                    msg.body(result_text)
+                    print(f"✅ Sent reply successfully")
+                except Exception as reply_error:
+                    print(f"❌ Failed to send reply: {reply_error}")
+                    # Try simpler message
+                    msg.body(f"التشخيص: {diagnosis}\nالدقة: {conf:.1f}%")
+                
+            except Exception as e:
+                print(f"❌ Error during processing: {e}")
+                import traceback
+                traceback.print_exc()
+                msg.body("❌ حدث خطأ أثناء تحليل الصورة. حاول مرة أخرى.")
             
-        except Exception as e:
-            print(f"❌ Error during processing: {e}")
-            import traceback
-            traceback.print_exc()
-            msg.body("❌ حدث خطأ أثناء تحليل الصورة. حاول مرة أخرى.")
-            
-        return str(resp)
-
-        # FALLBACK
-        msg.body("🤖 لم أفهم رسالتك. أرسل 'هلا' للبدء.")
         return str(resp)
         
     except Exception as e:
