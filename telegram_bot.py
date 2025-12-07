@@ -32,7 +32,7 @@ def download_models_from_dropbox():
     else:
         print("   Models directory doesn't exist, creating and downloading...")
     
-    print("📥 Downloading models from Hugging Face....")
+    print("📥 Downloading models from Hugging Face...")
     
     HUGGINGFACE_URL = "https://huggingface.co/ziadabdullah/saudi-plant-disease-models/resolve/main/models.zip"
     
@@ -53,14 +53,32 @@ def download_models_from_dropbox():
         
         # Extract
         with zipfile.ZipFile("models.zip", 'r') as z:
+            file_list = z.namelist()
+            print(f"   Extracting {len(file_list)} files...")
             z.extractall('.')
         
-        print(f"   Extracted {len(z.namelist())} files")
         os.remove("models.zip")
         
-        # Verify
-        model_files = list(models_dir.glob('*.keras'))
-        print(f"✅ Models ready! ({len(model_files)} files found)")
+        # Find models - check both root and nested directories
+        model_files = list(Path('.').rglob('*.keras'))
+        print(f"   Found {len(model_files)} .keras files")
+        
+        # Move models to correct location if they're nested
+        if model_files and not models_dir.exists():
+            models_dir.mkdir(exist_ok=True)
+        
+        for model_file in model_files:
+            if model_file.parent != models_dir:
+                target = models_dir / model_file.name
+                print(f"   Moving {model_file.name} to models/")
+                model_file.rename(target)
+        
+        # Verify final count
+        final_count = len(list(models_dir.glob('*.keras')))
+        print(f"✅ Models ready! ({final_count} files in models/ directory)")
+        
+        if final_count < 18:
+            print(f"⚠️ Warning: Expected 18 models, only found {final_count}")
         
     except Exception as e:
         print(f"❌ Download Error: {e}")
@@ -317,4 +335,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
