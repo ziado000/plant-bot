@@ -14,6 +14,9 @@ import zipfile
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
+# Statistics logging
+from bot_statistics import log_prediction, initialize_stats_file
+
 # Download models from Dropbox
 def download_models_from_dropbox():
     models_dir = Path('models')
@@ -166,17 +169,42 @@ def predict_image(model, img_data, model_name):
     indices = class_indices.get(model_name, {})
     english_label = indices.get(str(predicted_class_idx), f"Class_{predicted_class_idx}")
     
+    print(f"   🔍 Translation lookup: model={model_name}, label={english_label}")
+    
     # Get bilingual label (Arabic + English)
     bilingual_label = english_label  # Default to English only
     
-    # Try to find translation with both languages
+    # Try multiple matching strategies
+    found = False
+    
+    # Strategy 1: Exact match
     if model_name in translations and english_label in translations[model_name]:
         bilingual_label = translations[model_name][english_label]
-    else:
-        # If exact match not found, try lowercase version
+        found = True
+        print(f"   ✅ Found exact match: {bilingual_label}")
+    
+    # Strategy 2: Lowercase with underscores
+    if not found:
         english_lower = english_label.lower().replace(' ', '_')
         if model_name in translations and english_lower in translations[model_name]:
             bilingual_label = translations[model_name][english_lower]
+            found = True
+            print(f"   ✅ Found lowercase match: {bilingual_label}")
+    
+    # Strategy 3: Try just lowercase
+    if not found:
+        english_simple_lower = english_label.lower()
+        if model_name in translations and english_simple_lower in translations[model_name]:
+            bilingual_label = translations[model_name][english_simple_lower]
+            found = True
+            print(f"   ✅ Found simple lowercase: {bilingual_label}")
+    
+    if not found:
+        print(f"   ⚠️ No translation found, using English only")
+        # Show what keys are available for debugging
+        if model_name in translations:
+            available_keys = list(translations[model_name].keys())[:3]
+            print(f"   Available keys: {available_keys}...")
     
     # If translation doesn't include English in parentheses, add it
     if english_label not in bilingual_label and '(' not in bilingual_label:
@@ -287,6 +315,15 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         diagnosis, conf = predict_image(model, img_data, current_crop)
         print(f"   ✅ Result: {diagnosis} ({conf:.1f}%)")
         
+        # Log statistics
+        log_prediction(
+            user_id=user_id,
+            crop_type=current_crop,
+            disease=diagnosis,
+            confidence=conf,
+            platform="Telegram"
+        )
+        
         # Escape HTML special characters
         diagnosis_escaped = diagnosis.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
         
@@ -311,6 +348,9 @@ def main():
     """Start the bot"""
     # Load resources
     load_resources()
+    
+    # Initialize statistics logging
+    initialize_stats_file()
     
     # Get bot token from environment
     TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
